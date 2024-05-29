@@ -7,19 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		118B63912C06D8D30011015B /* AppScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B63902C06D8D30011015B /* AppScreenModel.swift */; };
+		118B63932C06D93A0011015B /* ViewComponentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B63922C06D93A0011015B /* ViewComponentModel.swift */; };
+		118B63952C06D9C40011015B /* AppSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B63942C06D9C40011015B /* AppSettingsModel.swift */; };
+		118B63972C06D9EC0011015B /* AppDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B63962C06D9EC0011015B /* AppDataModel.swift */; };
+		118B63992C06DBBA0011015B /* StartupPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B63982C06DBBA0011015B /* StartupPopupView.swift */; };
+		118B639D2C0773110011015B /* TutorialModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118B639C2C0773110011015B /* TutorialModel.swift */; };
 		11BE199D29FAF63800E01425 /* SwiftFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BE199C29FAF63800E01425 /* SwiftFlowApp.swift */; };
 		11BE199F29FAF63800E01425 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BE199E29FAF63800E01425 /* ContentView.swift */; };
 		11BE19A129FAF63900E01425 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11BE19A029FAF63900E01425 /* Assets.xcassets */; };
 		11BE19A529FAF63900E01425 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11BE19A429FAF63900E01425 /* Preview Assets.xcassets */; };
+		11BE19AE29FB254800E01425 /* AppProjectCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BE19AD29FB254800E01425 /* AppProjectCardView.swift */; };
+		11BE19B029FB3D6D00E01425 /* AllProjectsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BE19AF29FB3D6D00E01425 /* AllProjectsView.swift */; };
+		11E776002B3DC23700457F73 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E775FF2B3DC23700457F73 /* AppModel.swift */; };
+		11F1C17D2B4A05AB0002B3A6 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11F1C17C2B4A05AB0002B3A6 /* EditorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		118B63902C06D8D30011015B /* AppScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreenModel.swift; sourceTree = "<group>"; };
+		118B63922C06D93A0011015B /* ViewComponentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewComponentModel.swift; sourceTree = "<group>"; };
+		118B63942C06D9C40011015B /* AppSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsModel.swift; sourceTree = "<group>"; };
+		118B63962C06D9EC0011015B /* AppDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDataModel.swift; sourceTree = "<group>"; };
+		118B63982C06DBBA0011015B /* StartupPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupPopupView.swift; sourceTree = "<group>"; };
+		118B639C2C0773110011015B /* TutorialModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialModel.swift; sourceTree = "<group>"; };
 		11BE199929FAF63800E01425 /* SwiftFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11BE199C29FAF63800E01425 /* SwiftFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftFlowApp.swift; sourceTree = "<group>"; };
 		11BE199E29FAF63800E01425 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		11BE19A029FAF63900E01425 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11BE19A229FAF63900E01425 /* SwiftFlow.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SwiftFlow.entitlements; sourceTree = "<group>"; };
 		11BE19A429FAF63900E01425 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		11BE19AD29FB254800E01425 /* AppProjectCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppProjectCardView.swift; sourceTree = "<group>"; };
+		11BE19AF29FB3D6D00E01425 /* AllProjectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllProjectsView.swift; sourceTree = "<group>"; };
+		11E775FF2B3DC23700457F73 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		11F1C17C2B4A05AB0002B3A6 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +53,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1170D67E2B389CF800FC607E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				11E775FF2B3DC23700457F73 /* AppModel.swift */,
+				118B63902C06D8D30011015B /* AppScreenModel.swift */,
+				118B63922C06D93A0011015B /* ViewComponentModel.swift */,
+				118B63942C06D9C40011015B /* AppSettingsModel.swift */,
+				118B63962C06D9EC0011015B /* AppDataModel.swift */,
+				118B639C2C0773110011015B /* TutorialModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		11BE199029FAF63800E01425 = {
 			isa = PBXGroup;
 			children = (
@@ -52,11 +85,16 @@
 		11BE199B29FAF63800E01425 /* SwiftFlow */ = {
 			isa = PBXGroup;
 			children = (
+				1170D67E2B389CF800FC607E /* Models */,
 				11BE199C29FAF63800E01425 /* SwiftFlowApp.swift */,
 				11BE199E29FAF63800E01425 /* ContentView.swift */,
+				11BE19AF29FB3D6D00E01425 /* AllProjectsView.swift */,
+				11BE19AD29FB254800E01425 /* AppProjectCardView.swift */,
 				11BE19A029FAF63900E01425 /* Assets.xcassets */,
 				11BE19A229FAF63900E01425 /* SwiftFlow.entitlements */,
 				11BE19A329FAF63900E01425 /* Preview Content */,
+				11F1C17C2B4A05AB0002B3A6 /* EditorView.swift */,
+				118B63982C06DBBA0011015B /* StartupPopupView.swift */,
 			);
 			path = SwiftFlow;
 			sourceTree = "<group>";
@@ -141,6 +179,16 @@
 			files = (
 				11BE199F29FAF63800E01425 /* ContentView.swift in Sources */,
 				11BE199D29FAF63800E01425 /* SwiftFlowApp.swift in Sources */,
+				118B63952C06D9C40011015B /* AppSettingsModel.swift in Sources */,
+				118B63932C06D93A0011015B /* ViewComponentModel.swift in Sources */,
+				11BE19B029FB3D6D00E01425 /* AllProjectsView.swift in Sources */,
+				11F1C17D2B4A05AB0002B3A6 /* EditorView.swift in Sources */,
+				11E776002B3DC23700457F73 /* AppModel.swift in Sources */,
+				11BE19AE29FB254800E01425 /* AppProjectCardView.swift in Sources */,
+				118B63912C06D8D30011015B /* AppScreenModel.swift in Sources */,
+				118B63992C06DBBA0011015B /* StartupPopupView.swift in Sources */,
+				118B63972C06D9EC0011015B /* AppDataModel.swift in Sources */,
+				118B639D2C0773110011015B /* TutorialModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,18 +327,20 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftflow.SwiftFlow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -317,18 +367,20 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftflow.SwiftFlow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
