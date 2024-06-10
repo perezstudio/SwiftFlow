@@ -8,8 +8,6 @@
 import SwiftUI
 import SwiftData
 
-
-
 struct StartupPopupView: View {
 	@Query var projects: [AppProject]
 	
