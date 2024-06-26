@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct Tutorial: Identifiable {
+struct Tutorial: Identifiable, Codable {
 	var id = UUID()
 	var title: String
 	var icon: String

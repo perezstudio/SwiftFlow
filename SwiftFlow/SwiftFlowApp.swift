@@ -9,25 +9,17 @@ import SwiftUI
 import SwiftData
 
 @main
-struct SwiftFlowApp: App {
-	
-	let modelContainer: ModelContainer
-
-	init() {
-		do {
-			modelContainer = try ModelContainer(for: AppProject.self)
-		} catch {
-			fatalError("Could not initialize ModelContainer")
-		}
-	}
-
-
-	
+struct SwiftUIAppBuilderApp: App {
     var body: some Scene {
-		WindowGroup {
-			StartupPopupView()
-				.accentColor(.blue)
-		}
-		.modelContainer(modelContainer)
+        #if os(iOS) || os (macOS)
+        DocumentGroup(editing: AppProject.self, contentType: .app) {
+            ContentView()
+        }
+        #else
+        WindowGroup {
+            ContentView()
+        }
+        .modelContainer(for: AppProject.self)
+        #endif
     }
 }
