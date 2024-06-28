@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct Sidebar: View {
-    
+//    @Binding var project: Project
     @Binding var selectedTab: Tab?
         
     var body: some View {
-        
         List {
+//            AppInfoView(project: $project)
             CustomTabBar(selectedTab: $selectedTab)
+            SidebarContainerView(selectedTab: $selectedTab)
         }
         .navigationTitle("Sidebar")
     }

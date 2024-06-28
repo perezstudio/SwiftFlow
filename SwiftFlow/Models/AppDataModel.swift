@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class AppData: Identifiable, Codable {
+class AppData {
     @Attribute(.unique) var id: UUID = UUID()
         var key: String
         var value: String

@@ -18,9 +18,6 @@ struct CustomTabBar: View {
             Divider()
                 .frame(height: 15)
             TabBarButton(icon: "diamond.lefthalf.filled", tab: .components, selectedTab: $selectedTab)
-            Divider()
-                .frame(height: 15)
-            TabBarButton(icon: "magnifyingglass", tab: .components, selectedTab: $selectedTab)
         }
         .frame(maxWidth: .infinity)
         .padding(8)

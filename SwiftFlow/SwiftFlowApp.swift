@@ -11,15 +11,19 @@ import SwiftData
 @main
 struct SwiftUIAppBuilderApp: App {
     var body: some Scene {
-        #if os(iOS) || os (macOS)
-        DocumentGroup(editing: AppProject.self, contentType: .app) {
-            ContentView()
-        }
-        #else
         WindowGroup {
             ContentView()
         }
         .modelContainer(for: AppProject.self)
-        #endif
+//        #if os(iOS) || os (macOS)
+//        DocumentGroup(editing: AppProject.self, contentType: .app) {
+//            ContentView()
+//        }
+//        #else
+//        WindowGroup {
+//            ContentView()
+//        }
+//        .modelContainer(for: AppProject.self)
+//        #endif
     }
 }

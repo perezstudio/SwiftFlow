@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class Action: Identifiable, Codable {
+class Action {
     @Attribute(.unique) var id: UUID = UUID()
     var trigger: String
     var actionType: String

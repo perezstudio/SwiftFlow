@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-class AppSettings: Identifiable, Codable {
+class AppSettings {
     @Attribute(.unique) var id: UUID = UUID()
     var theme: String
     var language: String
