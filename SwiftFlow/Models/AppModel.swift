@@ -19,10 +19,11 @@ final class AppProject {
     var macOS: Bool
     var iPadOS: Bool
     var iOS: Bool
+    @Relationship var files: [Files] = []
     @Relationship var screens: [AppScreen] = []
     @Relationship var settings: AppSettings?
 
-    init(name: String, version: String, primaryColor: String, icon: String, macOS: Bool, iPadOS: Bool, iOS: Bool, settings: AppSettings? = nil) {
+    init(name: String, version: String, primaryColor: String, icon: String, macOS: Bool, iPadOS: Bool, iOS: Bool, files: [Files], settings: AppSettings? = nil) {
         self.name = name
         self.version = version
         self.primaryColor = primaryColor
@@ -30,6 +31,7 @@ final class AppProject {
         self.macOS = macOS
         self.iPadOS = iPadOS
         self.iOS = iOS
+        self.files = files
         self.settings = settings
     }
     // Codable conformance

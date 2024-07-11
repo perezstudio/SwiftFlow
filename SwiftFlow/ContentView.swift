@@ -19,28 +19,40 @@ struct ContentView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(apps) { app in
-                        VStack {
-                            ZStack {
-                                Image(systemName: app.icon)
-                                    .resizable()
-                                    .scaledToFit()
+                        ZStack(alignment: .topTrailing) {
+                            VStack {
+                                NavigationLink(destination: ProjectEditorView(project: app)) {
+                                    ZStack {
+                                        Image(systemName: app.icon)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .padding(.horizontal, 16)
+                                            .padding(.vertical, 16)
+                                            .frame(width: 80, height: 80)
+                                            .background(colorFromString(app.primaryColor))
+                                            .cornerRadius(18)
+                                            .shadow(radius: 6)
+                                    }
                                     .padding(.horizontal, 16)
-                                    .padding(.vertical, 16)
-                                    .frame(width: 80, height: 80)
-                                    .background(colorFromString(app.primaryColor))
-                                    .cornerRadius(18)
-                                    .shadow(radius: 6)
+                                    .padding(.vertical, 20)
+                                    .frame(maxWidth: .infinity, maxHeight: 130)
+                                }
+                                .background(colorFromString(app.primaryColor).opacity(0.20))
+                                .cornerRadius(10)
+                                Text(app.name)
                             }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 20)
-                            .frame(maxWidth: .infinity, maxHeight: 130)
-                            .background(colorFromString(app.primaryColor).opacity(0.20))
-                            .cornerRadius(12)
-                            Text(app.name)
-                        }
-                        .onTapGesture {
-                            currentProject = app
-                            isPresentingProjectForm = true
+                            VStack {
+                                Image(systemName: "ellipsis")
+                                    .padding(8)
+                                    .background(Color.white.opacity(0.20))
+                                    .foregroundColor(Color.white)
+                                    .cornerRadius(8)
+                                    .onTapGesture {
+                                        currentProject = app
+                                        isPresentingProjectForm = true
+                                    }
+                            }
+                            .padding([.top, .trailing], 8)
                         }
                     }
                 }
@@ -50,54 +62,24 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: {
-                        currentProject = AppProject.empty
+                        currentProject = nil
                         isPresentingProjectForm = true
                     }) {
                         Image(systemName: "plus")
+                        Text("New App")
                     }
                 }
             }
         }
         .sheet(isPresented: $isPresentingProjectForm) {
-            if (currentProject != nil) {
-                AppProjectFormView(project: currentProject)
-            } else {
-                AppProjectFormView()
-            }
+            AppProjectFormView(project: $currentProject)
+                .onDisappear {
+                    currentProject = nil
+                }
         }
     }
-    
-    func colorFromString(_ colorString: String) -> Color {
-        switch colorString.lowercased() {
-            case "blue":
-                return Color.blue
-            case "brown":
-                return Color.brown
-            case "purple":
-                return Color.purple
-            case "red":
-                return Color.red
-            case "yellow":
-                return Color.yellow
-            case "green":
-                return Color.green
-            case "teal":
-                return Color.teal
-            case "cyan":
-                return Color.cyan
-            case "gray":
-                return Color.gray
-            case "indigo":
-                return Color.indigo
-            case "mint":
-                return Color.mint
-            case "orange":
-                return Color.orange
-            case "pink":
-                return Color.pink
-            default:
-                return Color.clear
-        }
-    }
-    
+}
+
+#Preview {
+    ContentView()
 }

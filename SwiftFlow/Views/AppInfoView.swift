@@ -10,14 +10,28 @@ import SwiftData
 
 struct AppInfoView: View {
     @Environment(\.modelContext) private var context
-    @Binding var project: Project
+    @Bindable var project: AppProject
     
     var body: some View {
-        VStack {
-            Text(project.name)
-            Text("App Settings")
+        HStack {
+            ZStack {
+                Image(systemName: project.icon)
+            }
+            .frame(width: 40, height: 40)
+            .background(colorFromString(project.primaryColor))
+            .cornerRadius(8)
+            VStack(alignment: .leading) {
+                Text(project.name)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                Text("App Settings")
+                    .font(.caption)
+            }
         }
-        
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(8)
+        .background(Material.bar)
+        .cornerRadius(10)
     }
 }
 

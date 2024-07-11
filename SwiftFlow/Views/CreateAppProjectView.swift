@@ -38,7 +38,7 @@ struct CreateAppProjectView: View {
     }
     
     private func createProject() {
-        let newProject = AppProject(name: projectName, version: projectVersion, primaryColor: projectPrimaryColor, icon: projectIcon, macOS: projectMacOS, iPadOS: projectiPadOS, iOS: projectiOS
+        let newProject = AppProject(name: projectName, version: projectVersion, primaryColor: projectPrimaryColor, icon: projectIcon, macOS: projectMacOS, iPadOS: projectiPadOS, iOS: projectiOS, files: []
             /*name: projectName, description: projectDescription*/)
         modelContext.insert(newProject)
         isPresented = false // Close the modal

@@ -13,7 +13,7 @@ struct ProjectDocument {
 
     var project: AppProject
 
-    init(project: AppProject = AppProject(name: "New Project", version: "1.0", primaryColor: "#FFFFFF", icon: "", macOS: true, iPadOS: true, iOS: true)) {
+    init(project: AppProject = AppProject(name: "New Project", version: "1.0", primaryColor: "#FFFFFF", icon: "", macOS: true, iPadOS: true, iOS: true, files: [])) {
         self.project = project
     }
 }

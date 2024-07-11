@@ -8,15 +8,19 @@
 import SwiftUI
 
 struct Sidebar: View {
-//    @Binding var project: Project
+    @Bindable var project: AppProject
     @Binding var selectedTab: Tab?
+    @Binding var selectedFile: Files?
+    @Binding var draggedComponent: Component?
         
     var body: some View {
-        List {
-//            AppInfoView(project: $project)
+        VStack {
+            AppInfoView(project: project)
             CustomTabBar(selectedTab: $selectedTab)
-            SidebarContainerView(selectedTab: $selectedTab)
+            SidebarContainerView(selectedTab: $selectedTab, project: project, selectedFile: $selectedFile, draggedComponent: $draggedComponent)
+            Spacer()
         }
+        .padding(16)
         .navigationTitle("Sidebar")
     }
 }

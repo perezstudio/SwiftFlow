@@ -12,82 +12,61 @@ struct ProjectEditorView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var selectedTab: Tab? = .fileSelector
     @State private var createProjectModal = false
-    @Query var projects: [AppProject]
-    @State var project: AppProject
+    @State private var selectedFile: Files? = nil
+    @Bindable var project: AppProject
+    @State var draggedComponent: Component?
 
     var body: some View {
-        if let project = projects.first, projects.count == 1 {
-//            NavigationSplitView {
-//                Sidebar(project: project, selectedTab: $selectedTab)
-//                    .toolbar {
-//                        ToolbarItem(placement: .automatic) {
-//                            Menu {
-//                                Button(action: {
-//                                    // Action for New View
-//                                    print("New View selected")
-//                                }) {
-//                                    Label("New View", systemImage: "rectangle.3.group")
-//                                }
-//
-//                                Button(action: {
-//                                    // Action for New Model
-//                                    print("New Model selected")
-//                                }) {
-//                                    Label("New Model", systemImage: "tablecells")
-//                                }
-//
-//                                Button(action: {
-//                                    // Action for New Query
-//                                    print("New Query selected")
-//                                }) {
-//                                    Label("New Query", systemImage: "externaldrive.connected.to.line.below")
-//                                }
-//                            } label: {
-//                                Image(systemName: "plus")
-//                            }
-//                        }
-//                    }
-//            } detail: {
-//                DetailView()
-//            }
-        } else {
-            NavigationSplitView {
-                Sidebar(selectedTab: $selectedTab)
-                    .toolbar {
-                        ToolbarItem(placement: .automatic) {
-                            Menu {
-                                Button(action: {
-                                    // Action for New View
-                                    print("New View selected")
-                                }) {
-                                    Label("New View", systemImage: "rectangle.3.group")
-                                }
-
-                                Button(action: {
-                                    // Action for New Model
-                                    print("New Model selected")
-                                }) {
-                                    Label("New Model", systemImage: "tablecells")
-                                }
-
-                                Button(action: {
-                                    // Action for New Query
-                                    print("New Query selected")
-                                }) {
-                                    Label("New Query", systemImage: "externaldrive.connected.to.line.below")
-                                }
-                            } label: {
-                                Image(systemName: "plus")
+        NavigationSplitView {
+            Sidebar(project: project, selectedTab: $selectedTab, selectedFile: $selectedFile, draggedComponent: $draggedComponent)
+                .toolbar {
+                    ToolbarItem(placement: .automatic) {
+                        Menu {
+                            Button(action: {
+                                createNewFile(type: "View")
+                            }) {
+                                Label("New View", systemImage: "rectangle.3.group")
                             }
+
+                            Button(action: {
+                                createNewFile(type: "Model")
+                            }) {
+                                Label("New Model", systemImage: "tablecells")
+                            }
+
+                            Button(action: {
+                                createNewFile(type: "Logic")
+                            }) {
+                                Label("New Logic", systemImage: "externaldrive.connected.to.line.below")
+                            }
+                        } label: {
+                            Image(systemName: "document.badge.plus")
                         }
                     }
-            } detail: {
-                DetailView()
-            }
-            .sheet(isPresented: $createProjectModal) {
-                CreateAppProjectView(isPresented: $createProjectModal)
-                    }
+                }
+        } detail: {
+            DetailView(project: project, selectedFile: $selectedFile, draggedComponent: $draggedComponent)
         }
         
+    }
+    
+    private func createNewFile(type: String) {
+        let newFileName = generateUniqueFileName(type: type)
+        let newFile = Files(name: newFileName, content: "", type: type)
+        project.files.append(newFile)
+        try? modelContext.save()
+    }
+    
+    private func generateUniqueFileName(type: String) -> String {
+        let baseName = "New \(type)"
+        var counter = 1
+        var uniqueName = baseName
+        
+        while project.files.contains(where: { $0.name == uniqueName }) {
+            counter += 1
+            uniqueName = "\(baseName) \(counter)"
+        }
+        
+        return uniqueName
     }
 }

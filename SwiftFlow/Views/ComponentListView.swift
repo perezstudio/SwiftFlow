@@ -8,12 +8,23 @@
 import SwiftUI
 
 struct ComponentListView: View {
+    
     var body: some View {
-        Text("Components List View")
-            .navigationTitle("Components List")
+        List {
+            ForEach(ComponentType.allCases, id: \.self) { componentType in
+                HStack {
+                    componentType.icon
+                    Text(componentType.displayName)
+                }
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+            }
+        }
+        .listStyle(.sidebar)
     }
 }
 
-#Preview {
-    ComponentListView()
-}
+//#Preview {
+//    ComponentListView()
+//}
