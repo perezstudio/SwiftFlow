@@ -78,6 +78,16 @@ struct ContentEditorView: View {
 
             ToolbarDivider()
 
+            // Device selector
+            DeviceSelectionBar(
+                selectedDevice: Binding(
+                    get: { appStore.editor.selectedDevice },
+                    set: { appStore.editor.selectedDevice = $0 }
+                )
+            )
+
+            ToolbarDivider()
+
             // Zoom controls
             ToolbarSegment {
                 ToolbarButton(

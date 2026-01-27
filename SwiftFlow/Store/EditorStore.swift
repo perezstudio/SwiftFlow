@@ -14,10 +14,13 @@ final class EditorStore {
     // MARK: - Canvas State
 
     /// Current zoom level (1.0 = 100%)
-    var zoomLevel: CGFloat = 1.0
+    var zoomLevel: CGFloat = 0.75
 
     /// Canvas offset for panning
     var canvasOffset: CGPoint = .zero
+
+    /// Selected device for preview
+    var selectedDevice: DeviceType = .iPhone15Pro
 
     /// Minimum zoom level
     let minZoom: CGFloat = 0.25

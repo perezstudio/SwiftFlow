@@ -28,12 +28,19 @@ struct ViewEditorView: View {
 
             // Main canvas area
             ZStack {
-                // Grid background
-                GridBackgroundView()
-
-                // Block tree visualization
+                // Device preview
                 if let viewFile = currentViewFile {
-                    BlockCanvasView(viewFile: viewFile)
+                    DevicePreviewView(
+                        viewFile: viewFile,
+                        selectedDevice: Binding(
+                            get: { appStore.editor.selectedDevice },
+                            set: { appStore.editor.selectedDevice = $0 }
+                        ),
+                        zoomLevel: Binding(
+                            get: { appStore.editor.zoomLevel },
+                            set: { appStore.editor.zoomLevel = $0 }
+                        )
+                    )
                 } else {
                     emptyCanvasState
                 }
