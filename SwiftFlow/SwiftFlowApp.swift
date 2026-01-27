@@ -10,23 +10,76 @@ import SwiftData
 
 @main
 struct SwiftFlowApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+    /// The shared app store instance
+    @State private var appStore = AppStore()
 
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    /// SwiftData model container
+    let modelContainer: ModelContainer = ModelContainer.swiftFlow
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Group {
+                if appStore.currentProject != nil {
+                    EditorView()
+                } else {
+                    StartingView()
+                }
+            }
+            .environment(appStore)
+            .environment(\.appStore, appStore)
+            .modelContainer(modelContainer)
+            .onAppear {
+                // Configure the app store with the model context
+                let context = modelContainer.mainContext
+                appStore.configure(with: context)
+            }
         }
-        .modelContainer(sharedModelContainer)
+        .windowStyle(.hiddenTitleBar)
+        .commands {
+            // Edit menu commands
+            CommandGroup(after: .undoRedo) {
+                Button(appStore.undo.undoMenuTitle) {
+                    appStore.undo.undo()
+                }
+                .keyboardShortcut("z", modifiers: .command)
+                .disabled(!appStore.undo.canUndo)
+
+                Button(appStore.undo.redoMenuTitle) {
+                    appStore.undo.redo()
+                }
+                .keyboardShortcut("z", modifiers: [.command, .shift])
+                .disabled(!appStore.undo.canRedo)
+            }
+
+            // View menu commands
+            CommandGroup(after: .sidebar) {
+                Button(appStore.isSidebarVisible ? "Hide Sidebar" : "Show Sidebar") {
+                    appStore.toggleSidebar()
+                }
+                .keyboardShortcut("s", modifiers: [.command, .control])
+
+                Button(appStore.isInspectorVisible ? "Hide Inspector" : "Show Inspector") {
+                    appStore.toggleInspector()
+                }
+                .keyboardShortcut("i", modifiers: [.command, .option])
+
+                Divider()
+
+                Button("Zoom In") {
+                    appStore.editor.zoomIn()
+                }
+                .keyboardShortcut("+", modifiers: .command)
+
+                Button("Zoom Out") {
+                    appStore.editor.zoomOut()
+                }
+                .keyboardShortcut("-", modifiers: .command)
+
+                Button("Reset Zoom") {
+                    appStore.editor.resetZoom()
+                }
+                .keyboardShortcut("0", modifiers: .command)
+            }
+        }
     }
 }
