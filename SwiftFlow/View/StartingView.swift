@@ -31,6 +31,7 @@ struct StartingView: View {
         }
         .frame(minWidth: 700, minHeight: 450)
         .ignoresSafeArea()
+        .edgeToEdgeWindow()
         .background(Color(nsColor: .windowBackgroundColor))
         .sheet(isPresented: $showingCreateProjectSheet) {
             CreateProjectSheet { project in

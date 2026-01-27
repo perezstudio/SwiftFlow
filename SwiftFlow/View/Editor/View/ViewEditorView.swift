@@ -13,93 +13,34 @@ struct ViewEditorView: View {
     @Environment(AppStore.self) private var appStore
     @Environment(\.modelContext) private var modelContext
 
-    @State private var isPaletteVisible = true
+    @Binding var isPaletteVisible: Bool
     @State private var paletteWidth: CGFloat = 220
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Custom toolbar
-            editorToolbar
+        HStack(spacing: 0) {
+            // Block palette (left side)
+            if isPaletteVisible {
+                BlockPaletteView()
+                    .frame(width: paletteWidth)
 
-            Divider()
-
-            // Main content
-            HStack(spacing: 0) {
-                // Block palette (left side)
-                if isPaletteVisible {
-                    BlockPaletteView()
-                        .frame(width: paletteWidth)
-
-                    Divider()
-                }
-
-                // Main canvas area
-                ZStack {
-                    // Grid background
-                    GridBackgroundView()
-
-                    // Block tree visualization
-                    if let viewFile = currentViewFile {
-                        BlockCanvasView(viewFile: viewFile)
-                    } else {
-                        emptyCanvasState
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Divider()
             }
+
+            // Main canvas area
+            ZStack {
+                // Grid background
+                GridBackgroundView()
+
+                // Block tree visualization
+                if let viewFile = currentViewFile {
+                    BlockCanvasView(viewFile: viewFile)
+                } else {
+                    emptyCanvasState
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(nsColor: .windowBackgroundColor))
-    }
-
-    // MARK: - Editor Toolbar
-
-    private var editorToolbar: some View {
-        CustomToolbar {
-            // Toggle palette
-            ToolbarButton(
-                icon: "sidebar.left",
-                action: { isPaletteVisible.toggle() },
-                isActive: isPaletteVisible,
-                helpText: "Toggle Block Palette"
-            )
-
-            ToolbarDivider()
-
-            // Zoom controls
-            ToolbarSegment {
-                ToolbarButton(
-                    icon: "minus.magnifyingglass",
-                    action: { appStore.editor.zoomOut() },
-                    helpText: "Zoom Out"
-                )
-
-                ToolbarLabel(text: "\(Int(appStore.editor.zoomLevel * 100))%")
-
-                ToolbarButton(
-                    icon: "plus.magnifyingglass",
-                    action: { appStore.editor.zoomIn() },
-                    helpText: "Zoom In"
-                )
-            }
-
-            ToolbarButton(
-                icon: "1.magnifyingglass",
-                action: { appStore.editor.resetZoom() },
-                helpText: "Reset Zoom"
-            )
-
-            ToolbarDivider()
-
-            // Grid toggle
-            ToolbarButton(
-                icon: "grid",
-                action: { appStore.editor.showGrid.toggle() },
-                isActive: appStore.editor.showGrid,
-                helpText: "Toggle Grid"
-            )
-
-            ToolbarSpacer()
-        }
     }
 
     // MARK: - Current View File
@@ -137,7 +78,7 @@ struct ViewEditorView: View {
 }
 
 #Preview {
-    ViewEditorView()
+    ViewEditorView(isPaletteVisible: .constant(true))
         .environment(AppStore())
         .frame(width: 800, height: 600)
 }

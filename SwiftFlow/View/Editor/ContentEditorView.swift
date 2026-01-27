@@ -10,11 +10,15 @@ import SwiftUI
 /// Main content editor that switches between different editor types based on selection
 struct ContentEditorView: View {
     @Environment(AppStore.self) private var appStore
+    @Environment(\.titleBarMetrics) private var titleBarMetrics
+
+    @State private var isPaletteVisible = true
 
     var body: some View {
         VStack(spacing: 0) {
-            // Content toolbar
+            // Content toolbar (positioned in title bar area)
             contentToolbar
+                .frame(height: titleBarMetrics.height)
 
             Divider()
 
@@ -23,7 +27,7 @@ struct ContentEditorView: View {
                 if let fileType = appStore.selectedFileType {
                     switch fileType {
                     case .view:
-                        ViewEditorView()
+                        ViewEditorView(isPaletteVisible: $isPaletteVisible)
                     case .dataModel:
                         ModelEditorPlaceholder()
                     case .query:
@@ -41,15 +45,6 @@ struct ContentEditorView: View {
 
     private var contentToolbar: some View {
         HStack(spacing: 8) {
-            // Close project button
-            ToolbarButton(
-                icon: "chevron.left",
-                action: { appStore.closeCurrentProject() },
-                helpText: "Close Project"
-            )
-
-            ToolbarDivider()
-
             // Project name
             if let project = appStore.currentProject {
                 Text(project.name)
@@ -58,11 +53,64 @@ struct ContentEditorView: View {
             }
 
             Spacer()
+
+            // View editor controls (only show when editing a view)
+            if appStore.selectedFileType == .view {
+                viewEditorControls
+            }
         }
+        .frame(maxHeight: .infinity)
         .padding(.horizontal, 12)
-        .padding(.top, 6)
-        .frame(height: 52)
-        .background(Color(nsColor: .windowBackgroundColor))
+        .background(.bar)
+    }
+
+    // MARK: - View Editor Controls
+
+    private var viewEditorControls: some View {
+        HStack(spacing: 8) {
+            // Toggle palette
+            ToolbarButton(
+                icon: "sidebar.left",
+                action: { isPaletteVisible.toggle() },
+                isActive: isPaletteVisible,
+                helpText: "Toggle Block Palette"
+            )
+
+            ToolbarDivider()
+
+            // Zoom controls
+            ToolbarSegment {
+                ToolbarButton(
+                    icon: "minus.magnifyingglass",
+                    action: { appStore.editor.zoomOut() },
+                    helpText: "Zoom Out"
+                )
+
+                ToolbarLabel(text: "\(Int(appStore.editor.zoomLevel * 100))%")
+
+                ToolbarButton(
+                    icon: "plus.magnifyingglass",
+                    action: { appStore.editor.zoomIn() },
+                    helpText: "Zoom In"
+                )
+            }
+
+            ToolbarButton(
+                icon: "1.magnifyingglass",
+                action: { appStore.editor.resetZoom() },
+                helpText: "Reset Zoom"
+            )
+
+            ToolbarDivider()
+
+            // Grid toggle
+            ToolbarButton(
+                icon: "grid",
+                action: { appStore.editor.showGrid.toggle() },
+                isActive: appStore.editor.showGrid,
+                helpText: "Toggle Grid"
+            )
+        }
     }
 }
 

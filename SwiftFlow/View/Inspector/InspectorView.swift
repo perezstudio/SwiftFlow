@@ -12,17 +12,13 @@ import SwiftData
 struct InspectorView: View {
     @Environment(AppStore.self) private var appStore
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.titleBarMetrics) private var titleBarMetrics
 
     var body: some View {
         VStack(spacing: 0) {
-            // Top spacer for window controls area
-            Spacer()
-                .frame(height: 52)
-
-            Divider()
-
-            // Inspector title header
+            // Inspector title header (positioned in title bar area)
             inspectorHeader
+                .frame(height: titleBarMetrics.height)
 
             Divider()
 
@@ -61,9 +57,9 @@ struct InspectorView: View {
                 .menuIndicator(.hidden)
             }
         }
+        .frame(maxHeight: .infinity)
         .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .background(Color(nsColor: .separatorColor).opacity(0.3))
+        .background(.bar)
     }
 
     private var headerTitle: String {

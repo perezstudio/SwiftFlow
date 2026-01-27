@@ -38,16 +38,22 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         splitView.dividerStyle = .thin
         splitView.delegate = context.coordinator
 
-        // Create hosting views for each SwiftUI view
-        let sidebarHostingView = NSHostingView(rootView: sidebar)
-        let contentHostingView = NSHostingView(rootView: content)
-        let detailHostingView = NSHostingView(rootView: detail)
+        // Create hosting views for each SwiftUI view, using AnyView for type erasure
+        // and ignoring safe area so content can extend into title bar
+        let sidebarHostingView = NSHostingView(rootView: AnyView(sidebar.ignoresSafeArea()))
+        let contentHostingView = NSHostingView(rootView: AnyView(content.ignoresSafeArea()))
+        let detailHostingView = NSHostingView(rootView: AnyView(detail.ignoresSafeArea()))
 
         // Store references in coordinator
         context.coordinator.sidebarView = sidebarHostingView
         context.coordinator.contentView = contentHostingView
         context.coordinator.detailView = detailHostingView
         context.coordinator.splitView = splitView
+
+        // Store typed hosting views for content updates
+        context.coordinator.sidebarHostingView = sidebarHostingView
+        context.coordinator.contentHostingView = contentHostingView
+        context.coordinator.detailHostingView = detailHostingView
 
         // Set initial widths using constraints
         sidebarHostingView.translatesAutoresizingMaskIntoConstraints = false
@@ -85,15 +91,10 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         // Update the SwiftUI views when state changes
         guard splitView.arrangedSubviews.count == 3 else { return }
 
-        if let sidebarHosting = splitView.arrangedSubviews[0] as? NSHostingView<Sidebar> {
-            sidebarHosting.rootView = sidebar
-        }
-        if let contentHosting = splitView.arrangedSubviews[1] as? NSHostingView<Content> {
-            contentHosting.rootView = content
-        }
-        if let detailHosting = splitView.arrangedSubviews[2] as? NSHostingView<Detail> {
-            detailHosting.rootView = detail
-        }
+        // Update root views through the coordinator's hosting view references
+        context.coordinator.sidebarHostingView?.rootView = AnyView(sidebar.ignoresSafeArea())
+        context.coordinator.contentHostingView?.rootView = AnyView(content.ignoresSafeArea())
+        context.coordinator.detailHostingView?.rootView = AnyView(detail.ignoresSafeArea())
 
         // Update visibility
         context.coordinator.updateVisibility(
@@ -122,6 +123,11 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         weak var sidebarView: NSView?
         weak var contentView: NSView?
         weak var detailView: NSView?
+
+        // Hosting view references for content updates (using AnyView for type erasure)
+        var sidebarHostingView: NSHostingView<AnyView>?
+        var contentHostingView: NSHostingView<AnyView>?
+        var detailHostingView: NSHostingView<AnyView>?
 
         private var currentSidebarVisible = true
         private var currentDetailVisible = true

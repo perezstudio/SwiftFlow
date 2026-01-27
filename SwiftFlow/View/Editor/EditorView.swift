@@ -28,6 +28,7 @@ struct EditorView: View {
         .sidebarVisible(appStore.isSidebarVisible)
         .detailVisible(appStore.isInspectorVisible)
         .ignoresSafeArea()
+        .edgeToEdgeWindow()
     }
 }
 

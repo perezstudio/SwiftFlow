@@ -10,6 +10,7 @@ import SwiftUI
 /// Main sidebar container that shows file list and context-specific navigator
 struct SidebarView: View {
     @Environment(AppStore.self) private var appStore
+    @Environment(\.titleBarMetrics) private var titleBarMetrics
 
     @State private var sidebarSection: SidebarSection = .files
 
@@ -29,13 +30,13 @@ struct SidebarView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Top spacer for window controls area
-            Spacer()
-                .frame(height: 52)
+            // Title bar toolbar area (alongside traffic lights)
+            sidebarToolbar
+                .frame(height: titleBarMetrics.height)
 
             Divider()
 
-            // Section picker
+            // Section picker (tab bar)
             sectionPicker
 
             Divider()
@@ -51,8 +52,30 @@ struct SidebarView: View {
             }
         }
         .frame(minWidth: 200)
-        .background(Color(nsColor: .windowBackgroundColor))
+        .materialBackground(.sidebar)
     }
+
+    // MARK: - Sidebar Toolbar
+
+    private var sidebarToolbar: some View {
+        HStack(spacing: 8) {
+            Spacer()
+
+            // Add file button
+            Button(action: { }) {
+                Image(systemName: "plus")
+                    .font(.system(size: 12, weight: .medium))
+            }
+            .buttonStyle(.borderless)
+            .help("Add File")
+        }
+        .frame(maxHeight: .infinity)
+        // Left padding to clear traffic light buttons
+        .padding(.leading, titleBarMetrics.trafficLightInset)
+        .padding(.trailing, 12)
+    }
+
+    // MARK: - Section Picker
 
     private var sectionPicker: some View {
         HStack(spacing: 2) {
