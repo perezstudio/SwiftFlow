@@ -17,70 +17,88 @@ struct ViewEditorView: View {
     @State private var paletteWidth: CGFloat = 220
 
     var body: some View {
-        HStack(spacing: 0) {
-            // Block palette (left side)
-            if isPaletteVisible {
-                BlockPaletteView()
-                    .frame(width: paletteWidth)
+        VStack(spacing: 0) {
+            // Custom toolbar
+            editorToolbar
 
-                Divider()
-            }
+            Divider()
 
-            // Main canvas area
-            ZStack {
-                // Grid background
-                GridBackgroundView()
+            // Main content
+            HStack(spacing: 0) {
+                // Block palette (left side)
+                if isPaletteVisible {
+                    BlockPaletteView()
+                        .frame(width: paletteWidth)
 
-                // Block tree visualization
-                if let viewFile = currentViewFile {
-                    BlockCanvasView(viewFile: viewFile)
-                } else {
-                    emptyCanvasState
+                    Divider()
                 }
+
+                // Main canvas area
+                ZStack {
+                    // Grid background
+                    GridBackgroundView()
+
+                    // Block tree visualization
+                    if let viewFile = currentViewFile {
+                        BlockCanvasView(viewFile: viewFile)
+                    } else {
+                        emptyCanvasState
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(nsColor: .windowBackgroundColor))
-        .toolbar {
-            ToolbarItemGroup(placement: .automatic) {
-                // Toggle palette
-                Button(action: { isPaletteVisible.toggle() }) {
-                    Image(systemName: isPaletteVisible ? "sidebar.left" : "sidebar.left")
-                        .symbolVariant(isPaletteVisible ? .fill : .none)
-                }
-                .help("Toggle Block Palette")
+    }
 
-                Divider()
+    // MARK: - Editor Toolbar
 
-                // Zoom controls
-                Button(action: { appStore.editor.zoomOut() }) {
-                    Image(systemName: "minus.magnifyingglass")
-                }
-                .help("Zoom Out")
+    private var editorToolbar: some View {
+        CustomToolbar {
+            // Toggle palette
+            ToolbarButton(
+                icon: "sidebar.left",
+                action: { isPaletteVisible.toggle() },
+                isActive: isPaletteVisible,
+                helpText: "Toggle Block Palette"
+            )
 
-                Text("\(Int(appStore.editor.zoomLevel * 100))%")
-                    .font(.system(size: 11, design: .monospaced))
-                    .frame(width: 40)
+            ToolbarDivider()
 
-                Button(action: { appStore.editor.zoomIn() }) {
-                    Image(systemName: "plus.magnifyingglass")
-                }
-                .help("Zoom In")
+            // Zoom controls
+            ToolbarSegment {
+                ToolbarButton(
+                    icon: "minus.magnifyingglass",
+                    action: { appStore.editor.zoomOut() },
+                    helpText: "Zoom Out"
+                )
 
-                Button(action: { appStore.editor.resetZoom() }) {
-                    Image(systemName: "1.magnifyingglass")
-                }
-                .help("Reset Zoom")
+                ToolbarLabel(text: "\(Int(appStore.editor.zoomLevel * 100))%")
 
-                Divider()
-
-                // Grid toggle
-                Button(action: { appStore.editor.showGrid.toggle() }) {
-                    Image(systemName: "grid")
-                        .symbolVariant(appStore.editor.showGrid ? .fill : .none)
-                }
-                .help("Toggle Grid")
+                ToolbarButton(
+                    icon: "plus.magnifyingglass",
+                    action: { appStore.editor.zoomIn() },
+                    helpText: "Zoom In"
+                )
             }
+
+            ToolbarButton(
+                icon: "1.magnifyingglass",
+                action: { appStore.editor.resetZoom() },
+                helpText: "Reset Zoom"
+            )
+
+            ToolbarDivider()
+
+            // Grid toggle
+            ToolbarButton(
+                icon: "grid",
+                action: { appStore.editor.showGrid.toggle() },
+                isActive: appStore.editor.showGrid,
+                helpText: "Toggle Grid"
+            )
+
+            ToolbarSpacer()
         }
     }
 
