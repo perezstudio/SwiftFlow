@@ -19,6 +19,8 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
     var sidebarMaxWidth: CGFloat = 300
     var contentMinWidth: CGFloat = 300
     var detailMinWidth: CGFloat = 300
+    var isSidebarVisible: Bool = true
+    var isDetailVisible: Bool = true
 
     init(
         @ViewBuilder sidebar: () -> Sidebar,
@@ -41,6 +43,12 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         let contentHostingView = NSHostingView(rootView: content)
         let detailHostingView = NSHostingView(rootView: detail)
 
+        // Store references in coordinator
+        context.coordinator.sidebarView = sidebarHostingView
+        context.coordinator.contentView = contentHostingView
+        context.coordinator.detailView = detailHostingView
+        context.coordinator.splitView = splitView
+
         // Set initial widths using constraints
         sidebarHostingView.translatesAutoresizingMaskIntoConstraints = false
         contentHostingView.translatesAutoresizingMaskIntoConstraints = false
@@ -60,8 +68,14 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         DispatchQueue.main.async {
             let totalWidth = splitView.bounds.width
             splitView.setPosition(self.sidebarMinWidth, ofDividerAt: 0)
-            // Position second divider so detail panel gets its minimum width
             splitView.setPosition(totalWidth - self.detailMinWidth, ofDividerAt: 1)
+
+            // Apply initial visibility
+            context.coordinator.updateVisibility(
+                sidebarVisible: self.isSidebarVisible,
+                detailVisible: self.isDetailVisible,
+                animated: false
+            )
         }
 
         return splitView
@@ -80,6 +94,13 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         if let detailHosting = splitView.arrangedSubviews[2] as? NSHostingView<Detail> {
             detailHosting.rootView = detail
         }
+
+        // Update visibility
+        context.coordinator.updateVisibility(
+            sidebarVisible: isSidebarVisible,
+            detailVisible: isDetailVisible,
+            animated: true
+        )
     }
 
     func makeCoordinator() -> Coordinator {
@@ -97,6 +118,16 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         let contentMinWidth: CGFloat
         let detailMinWidth: CGFloat
 
+        weak var splitView: NSSplitView?
+        weak var sidebarView: NSView?
+        weak var contentView: NSView?
+        weak var detailView: NSView?
+
+        private var currentSidebarVisible = true
+        private var currentDetailVisible = true
+        private var lastSidebarWidth: CGFloat = 0
+        private var lastDetailWidth: CGFloat = 0
+
         init(
             sidebarMinWidth: CGFloat,
             sidebarMaxWidth: CGFloat,
@@ -107,6 +138,82 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
             self.sidebarMaxWidth = sidebarMaxWidth
             self.contentMinWidth = contentMinWidth
             self.detailMinWidth = detailMinWidth
+            self.lastSidebarWidth = sidebarMinWidth
+            self.lastDetailWidth = detailMinWidth
+        }
+
+        func updateVisibility(sidebarVisible: Bool, detailVisible: Bool, animated: Bool) {
+            guard let splitView = splitView,
+                  let sidebarView = sidebarView,
+                  let detailView = detailView else { return }
+
+            // Handle sidebar visibility change
+            if sidebarVisible != currentSidebarVisible {
+                if sidebarVisible {
+                    // Show sidebar
+                    sidebarView.isHidden = false
+                    if animated {
+                        NSAnimationContext.runAnimationGroup { context in
+                            context.duration = 0.2
+                            context.allowsImplicitAnimation = true
+                            splitView.setPosition(lastSidebarWidth, ofDividerAt: 0)
+                        }
+                    } else {
+                        splitView.setPosition(lastSidebarWidth, ofDividerAt: 0)
+                    }
+                } else {
+                    // Hide sidebar - save current width first
+                    lastSidebarWidth = sidebarView.frame.width
+                    if animated {
+                        NSAnimationContext.runAnimationGroup { context in
+                            context.duration = 0.2
+                            context.allowsImplicitAnimation = true
+                            splitView.setPosition(0, ofDividerAt: 0)
+                        } completionHandler: {
+                            sidebarView.isHidden = true
+                        }
+                    } else {
+                        splitView.setPosition(0, ofDividerAt: 0)
+                        sidebarView.isHidden = true
+                    }
+                }
+                currentSidebarVisible = sidebarVisible
+            }
+
+            // Handle detail visibility change
+            if detailVisible != currentDetailVisible {
+                let totalWidth = splitView.bounds.width
+                if detailVisible {
+                    // Show detail
+                    detailView.isHidden = false
+                    let position = totalWidth - lastDetailWidth
+                    if animated {
+                        NSAnimationContext.runAnimationGroup { context in
+                            context.duration = 0.2
+                            context.allowsImplicitAnimation = true
+                            splitView.setPosition(position, ofDividerAt: 1)
+                        }
+                    } else {
+                        splitView.setPosition(position, ofDividerAt: 1)
+                    }
+                } else {
+                    // Hide detail - save current width first
+                    lastDetailWidth = detailView.frame.width
+                    if animated {
+                        NSAnimationContext.runAnimationGroup { context in
+                            context.duration = 0.2
+                            context.allowsImplicitAnimation = true
+                            splitView.setPosition(totalWidth, ofDividerAt: 1)
+                        } completionHandler: {
+                            detailView.isHidden = true
+                        }
+                    } else {
+                        splitView.setPosition(totalWidth, ofDividerAt: 1)
+                        detailView.isHidden = true
+                    }
+                }
+                currentDetailVisible = detailVisible
+            }
         }
 
         func splitView(
@@ -116,9 +223,10 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
         ) -> CGFloat {
             switch dividerIndex {
             case 0:
-                return sidebarMinWidth
+                return currentSidebarVisible ? sidebarMinWidth : 0
             case 1:
-                return sidebarMinWidth + contentMinWidth
+                let sidebarWidth = currentSidebarVisible ? sidebarMinWidth : 0
+                return sidebarWidth + contentMinWidth
             default:
                 return proposedMinimumPosition
             }
@@ -132,9 +240,9 @@ struct SplitViewContainer<Sidebar: View, Content: View, Detail: View>: NSViewRep
             let totalWidth = splitView.bounds.width
             switch dividerIndex {
             case 0:
-                return sidebarMaxWidth
+                return currentSidebarVisible ? sidebarMaxWidth : 0
             case 1:
-                return totalWidth - detailMinWidth
+                return currentDetailVisible ? totalWidth - detailMinWidth : totalWidth
             default:
                 return proposedMaximumPosition
             }
@@ -172,6 +280,18 @@ extension SplitViewContainer {
     func detailMinWidth(_ width: CGFloat) -> SplitViewContainer {
         var copy = self
         copy.detailMinWidth = width
+        return copy
+    }
+
+    func sidebarVisible(_ visible: Bool) -> SplitViewContainer {
+        var copy = self
+        copy.isSidebarVisible = visible
+        return copy
+    }
+
+    func detailVisible(_ visible: Bool) -> SplitViewContainer {
+        var copy = self
+        copy.isDetailVisible = visible
         return copy
     }
 }

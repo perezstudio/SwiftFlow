@@ -12,21 +12,57 @@ struct ContentEditorView: View {
     @Environment(AppStore.self) private var appStore
 
     var body: some View {
-        Group {
-            if let fileType = appStore.selectedFileType {
-                switch fileType {
-                case .view:
-                    ViewEditorView()
-                case .dataModel:
-                    ModelEditorPlaceholder()
-                case .query:
-                    QueryEditorPlaceholder()
+        VStack(spacing: 0) {
+            // Content toolbar
+            contentToolbar
+
+            Divider()
+
+            // Editor content
+            Group {
+                if let fileType = appStore.selectedFileType {
+                    switch fileType {
+                    case .view:
+                        ViewEditorView()
+                    case .dataModel:
+                        ModelEditorPlaceholder()
+                    case .query:
+                        QueryEditorPlaceholder()
+                    }
+                } else {
+                    WelcomeView()
                 }
-            } else {
-                WelcomeView()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    // MARK: - Content Toolbar
+
+    private var contentToolbar: some View {
+        HStack(spacing: 8) {
+            // Close project button
+            ToolbarButton(
+                icon: "chevron.left",
+                action: { appStore.closeCurrentProject() },
+                helpText: "Close Project"
+            )
+
+            ToolbarDivider()
+
+            // Project name
+            if let project = appStore.currentProject {
+                Text(project.name)
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(.primary)
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 12)
+        .padding(.top, 6)
+        .frame(height: 52)
+        .background(Color(nsColor: .windowBackgroundColor))
     }
 }
 

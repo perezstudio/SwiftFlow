@@ -15,7 +15,13 @@ struct InspectorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Header
+            // Top spacer for window controls area
+            Spacer()
+                .frame(height: 52)
+
+            Divider()
+
+            // Inspector title header
             inspectorHeader
 
             Divider()

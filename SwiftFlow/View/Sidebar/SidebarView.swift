@@ -29,6 +29,12 @@ struct SidebarView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+            // Top spacer for window controls area
+            Spacer()
+                .frame(height: 52)
+
+            Divider()
+
             // Section picker
             sectionPicker
 
@@ -45,6 +51,7 @@ struct SidebarView: View {
             }
         }
         .frame(minWidth: 200)
+        .background(Color(nsColor: .windowBackgroundColor))
     }
 
     private var sectionPicker: some View {
